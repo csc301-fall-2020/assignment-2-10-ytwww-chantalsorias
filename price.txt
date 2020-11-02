@@ -6,7 +6,7 @@ margheritapizza 7.99
 vegetarianpizza 7.99
 neapolitanpizza 7.99
 olives 1.25
-tomatoes 1.25ss
+tomatoes 1.25
 mushrooms 1.25
 jalapenos 1.25
 chicken 1.25
