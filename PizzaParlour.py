@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from MenuItem import Pizza
 from MenuItem import Drink
 from Order import OrderItem
@@ -77,24 +77,33 @@ def get_drinks():
         drinks[item.name] = item.price
     return drinks
 
+# order routes
+
 
 @app.route('/order')
 def new_order():
     return generate_new_order_number()
 
 
-@app.route('/order/<order_number>')
+@app.route('/order/<order_number>', methods=['GET', 'DELETE'])
 def get_order(order_number):
-    items_in_order = {}
-    for item in order_items:
-        if item.order_number == order_number:
-            if item.item.name in items_in_order:
-                items_in_order[item.item.name]["quantity"] += 1
-            else:
-                items_in_order[item.item.name] = {
-                    "price": item.item.price, "quantity": 1}
+    if request.method == 'GET':
+        items_in_order = {}
+        for item in order_items:
+            if item.order_number == order_number:
+                if item.item.name in items_in_order:
+                    items_in_order[item.item.name]["quantity"] += 1
+                else:
+                    items_in_order[item.item.name] = {
+                        "price": item.item.price, "quantity": 1}
 
-    return items_in_order
+        return items_in_order
+
+    if request.method == 'DELETE':
+        for order_item in order_items:
+            if order_item.order_number == order_number:
+                order_items.remove(order_item)
+        return "order " + order_number + " canceled!"
 
 
 @app.route('/order/<order_number>/drink/<item_name>')
@@ -108,6 +117,32 @@ def add_item_to_order(order_number, item_name):
     new_order_item = OrderItem(order_number, item_to_add)
     order_items.append(new_order_item)
     return "item added!"
+
+
+@app.route('/order/<order_number>/drink', methods=['POST'])
+def add_drink_to_order(order_number):
+    req_data = request.get_json()
+    drink_name = req_data['name']
+    drink_price = req_data['price']
+
+    drink_to_add = Drink(drink_name, drink_price)
+
+    new_order_item = OrderItem(order_number, drink_to_add)
+    order_items.append(new_order_item)
+    return str(drink_name) + " item added!"
+
+
+@app.route('/order/<order_number>/pizza', methods=['POST'])
+def add_pizza_to_order(order_number):
+    req_data = request.get_json()
+    pizza_name = req_data['name']
+    pizza_price = req_data['price']
+
+    pizza_to_add = Pizza(pizza_name, pizza_price)
+
+    new_order_item = OrderItem(order_number, pizza_to_add)
+    order_items.append(new_order_item)
+    return str(pizza_name) + " item added!"
 
 
 if __name__ == "__main__":
