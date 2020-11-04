@@ -1,0 +1,7 @@
+small 3.99
+medium 5.99
+large 7.99
+pepperoni 7.99
+margherita 7.99
+vegetarian 7.99
+neapolitan 7.99

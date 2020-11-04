@@ -1,0 +1,7 @@
+olives 1.22
+tomatoes 1.22
+mushrooms 1.22
+jalapenos 1.22
+chicken 1.35
+beef 1.35
+pepperoni 1.35

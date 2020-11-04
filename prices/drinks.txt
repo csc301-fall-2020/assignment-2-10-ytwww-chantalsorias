@@ -1,0 +1,8 @@
+coke 1.66
+dietcoke 1.66
+cokezero 1.66
+pepsi 1.77
+dietpepsi 1.77
+drpepper 1.88
+water 1.88
+juice 1.88
