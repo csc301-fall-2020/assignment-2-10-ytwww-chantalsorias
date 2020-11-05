@@ -82,6 +82,11 @@ def get_drink_price(drink_name):
     return str(menu.find_drink(drink_name).price)
 
 
+@app.route('/menu/toppings/<topping_name>')
+def get_topping_price(topping_name):
+    return str(menu.find_topping(topping_name).price)
+
+
 @app.route('/menu/pizzas')
 def get_pizzas():
     return menu.get_pizzas()
@@ -100,6 +105,11 @@ def get_drinks():
     # return drinks
 
 # order routes
+
+
+@app.route('/menu/toppings')
+def get_toppings():
+    return menu.get_toppings()
 
 
 @app.route('/order')

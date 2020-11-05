@@ -2,6 +2,7 @@ class Menu:
     def __init__(self):
         self.pizzas = []
         self.drinks = []
+        self.toppings = []
 
     def add_pizza(self, pizza):
         self.pizzas.append(pizza)
@@ -18,6 +19,11 @@ class Menu:
         for drink in self.drinks:
             if drink.name == drink_name:
                 return drink
+
+    def find_topping(self, topping_name):
+        for topping in self.toppings:
+            if topping.name == topping_name:
+                return topping
 
     def get_menu_items(self):
         menu = {}
@@ -38,6 +44,12 @@ class Menu:
         for item in self.drinks:
             drinks[item.name] = item.price
         return drinks
+
+    def get_toppings(self):
+        toppings = {}
+        for item in self.toppings:
+            toppings[item.name] = item.price
+        return toppings
 
 
 class MenuItem:
