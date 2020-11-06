@@ -6,38 +6,14 @@ from MenuItem import CustomPizza
 from MenuItem import Size
 from MenuItem import Topping
 from Order import OrderItem, Orders
-from Prices import drinkPrices, toppingPrices, pizzaPrices
+from Prices import menu
+
 
 app = Flask("Assignment 2")
-
-menu_items = {}
-
-pepporoni_pizza = Pizza("pepperonipizza", 7.99)
-pizzas = []
-pizzas.append(pepporoni_pizza)
-
-menu_items["pizzas"] = pizzas
-
-
-pepsi = Drink("pepsi", 1.88)
-coke = Drink("coke", 1.88)
-dietpepsi = Drink("dietpepsi", 1.88)
-drinks = []
-drinks.append(pepsi)
-drinks.append(coke)
-drinks.append(dietpepsi)
-
-menu_items["drinks"] = drinks
 
 order_number = 1
 order_items = []
 orders = Orders()
-menu = Menu()
-menu.add_pizza(pepporoni_pizza)
-menu.add_drink(pepsi)
-menu.add_drink(dietpepsi)
-menu.add_drink(coke)
-
 
 # routes
 @app.route('/pizza')
