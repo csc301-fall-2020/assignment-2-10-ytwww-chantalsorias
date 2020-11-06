@@ -9,6 +9,9 @@ class Menu:
 
     def add_drink(self, drink):
         self.drinks.append(drink)
+    
+    def add_topping(self, topping):
+        self.toppings.append(topping)
 
     def find_pizza(self, pizza_name):
         for pizza in self.pizzas:
@@ -30,6 +33,8 @@ class Menu:
         for item in self.pizzas:
             menu[item.name] = item.price
         for item in self.drinks:
+            menu[item.name] = item.price
+        for item in self.toppings:
             menu[item.name] = item.price
         return menu
 
