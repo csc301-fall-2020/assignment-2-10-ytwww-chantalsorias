@@ -108,6 +108,8 @@ class CustomPizza(MenuItem):
 
         return price
 
+    def serialize(self):
+        return {"size": {"name": self.size, "price": self.price, "toppings": self.toppings}}
 
 def merge_two_dicts(x, y):
     z = x.copy()

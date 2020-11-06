@@ -2,7 +2,6 @@ import cmd
 import sys
 import requests
 from Prices import drinkPrices, toppingPrices, pizzaPrices
-import json
 
 HEADERS = {'Content-Type': 'application/json'}
 
@@ -62,7 +61,7 @@ def format(d):
     'Convert a dict to a more readible format'
     res = ""
     for key in d:
-        res += "%-12s%-12s" % (key, d[key]) + "\n"
+        res += "%-12s%-12s\n" % (key, d[key])
     return res
 
 
@@ -73,21 +72,26 @@ def menu_helper(L):
         category = L[0]
         if category in ["topping", "pizza", "drink"]:
             route = "/" + category + "s"
+            # price for a specified item
             if len(L) == 2:
                 try:
                     res = requests.get(url + route + "/" + L[1]).text
                 except:
                     res = "Please enter a valid item name."
+            # menu by category
             else:
                 try:
-                    res = requests.get(url + route).json()
+                    res = format(requests.get(url + route).json())
                 except:
                     res = "Server failed to send menu."
         else:
             res = "Please enter one of the following as category:  pizza  topping  drink"
+    # full menu
     else:
         try:
-            res = "The full menu:\n" + format(requests.get(url).json())
+            res = "The full menu:"
+            for category in ["/pizzas", "/toppings", "/drinks"]:
+                res += "\n" + category[1:] + "\n" + format(requests.get(url + category).json())
         except:
             res = "Server failed to send menu."
     return res
@@ -96,7 +100,7 @@ def menu_helper(L):
 def add_helper(L):
     res = ""
     if len(L) < 3:
-        print("Please specify order number, category and item name. E.g. add 1 drink coke")
+        res = "Please specify order number, category and item name. E.g. add 1 drink coke, add 1 custompizza small beef"
     else:
         order_number, category, name = L[0], L[1], L[2]
         if category not in ["topping", "pizza", "drink", "custompizza"]:
