@@ -1,3 +1,6 @@
+from MenuItem import CustomPizza
+
+
 class Orders:
     def __init__(self):
         self.orders = []
@@ -25,13 +28,20 @@ class Orders:
 class Order:
     def __init__(self, order_number):
         self.order_number = order_number
+        self.custom_pizza_number = 1
         self.items = []
 
     def add_item(self, item):
+        if (isinstance(item, CustomPizza)):
+            self.custom_pizza_number += 1
+
         self.items.append(item)
 
-    def remove_item(self, item):
-        self.items.remove(item)
+    def remove_item(self, item_name):
+        for item in self.items:
+            if item.name == item_name:
+                self.items.remove(item)
+                break
 
     def display_items(self):
         items_in_order = {}
