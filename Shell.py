@@ -2,8 +2,7 @@ import cmd
 import sys
 import requests
 from Prices import drinkPrices, toppingPrices, pizzaPrices
-# import json
-# from MenuItem import Drink, Pizza
+import json
 
 HEADERS = {'Content-Type': 'application/json'}
 
@@ -12,6 +11,7 @@ class PizzaShell(cmd.Cmd):
     intro = '\nWelcome to Pizza Parlour.\nType ? to list commands. Type q to quit.\n'
     prompt = '[ Pizza Parlour ] '
     file = None
+    # def preloop
 
     def do_menu(self, arg):
         '- show the full menu:  menu\n- show pizza menu:  menu pizza\n- show topping menu:  menu topping\n- show drink menu:  menu drink\n- Show price for a specific item:\n    menu pizza vegetarian\n    menu drink coke\n    menu topping mushroom'
@@ -55,7 +55,15 @@ class PizzaShell(cmd.Cmd):
 
 def parse(arg):
     'Convert the user input to a list'
-    return (arg.lower()).split()
+    return ((arg.lower()).replace('.', '')).split()
+
+
+def format(d):
+    'Convert a dict to a more readible format'
+    res = ""
+    for key in d:
+        res += "%-12s%-12s" % (key, d[key]) + "\n"
+    return res
 
 
 def menu_helper(L):
@@ -78,7 +86,10 @@ def menu_helper(L):
         else:
             res = "Please enter one of the following as category:  pizza  topping  drink"
     else:
-        res = "The full menu:\n" + str(requests.get(url).json())
+        try:
+            res = "The full menu:\n" + format(requests.get(url).json())
+        except:
+            res = "Server failed to send menu."
     return res
 
 
@@ -112,7 +123,6 @@ def add_helper(L):
                 r = requests.post(
                     "http://127.0.0.1:5000/order/" + order_number + "/" + category, headers=HEADERS, json=item)
                 res = r.text
-                # print(res)
             except:
                 res = "Please enter a valid item name."
     return res

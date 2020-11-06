@@ -1,9 +1,14 @@
 from PizzaParlour import app
 from MenuItem import Drink, Pizza
+import Shell as s
 import json
 HEADERS = {'Content-Type': 'application/json'}
 
+# Tests for Shell without a server
+def test_parse():
+    assert s.parse("   1    DrINK    DR.pepPer      ") == ["1", "drink", "drpepper"]
 
+# Tests for server
 def test_pizza():
     response = app.test_client().get('/pizza')
 
@@ -40,3 +45,13 @@ def test_cancel_order():
 
     assert response.status_code == 200
     assert response.data == b'order 1 canceled!'
+
+# # Tests for Shell with a server
+# def test_full_menu():
+#     # assert menu_helper(["menu"]) == ["1", "drink", "coke"]
+
+# def test_pizza_menu():
+#     assert True
+
+# def test_drink_menu():
+#     assert True
