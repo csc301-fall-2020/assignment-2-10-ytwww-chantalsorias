@@ -10,38 +10,37 @@ class PizzaShell(cmd.Cmd):
     intro = '\nWelcome to Pizza Parlour.\nType ? to list commands. Type q to quit.\n'
     prompt = '[ Pizza Parlour ] '
     file = None
-    # def preloop
 
     def do_menu(self, arg):
-        '- show the full menu:  menu\n- show pizza menu:  menu pizza\n- show topping menu:  menu topping\n- show drink menu:  menu drink\n- Show price for a specific item:\n    menu pizza vegetarian\n    menu drink coke\n    menu topping mushroom'
+        '- show the full menu:  menu\n- show pizza menu:  menu pizza\n- show topping menu:  menu topping\n- show drink menu:  menu drink\n- Show price for a specific item:\n    menu <category> <name>\n    menu pizza vegetarian\n    menu drink coke\n    menu topping mushroom'
         print(menu_helper(parse(arg)))
 
     def do_new(self, arg):
-        'start a new order:  new'
+        'Start a new order:  new'
         print("New order started:")
         print(requests.get("http://127.0.0.1:5000/order").text)
 
     def do_cart(self, n):
-        'View the cart:  cart'
+        'View the cart:  cart <order number>'
         if n:
             print(requests.get("http://127.0.0.1:5000/order/" + str(n)).text)
         else:
             print("Please enter your order number.")
 
     def do_add(self, arg):
-        'Add an item to the cart:\n  add pizza pepperoni\n  add drink coke\n  add topping mushroom'
+        'Add an item to the cart\n\n- To add a drink or a predefined pizza:\n  add <order number> <category> <name>\n- To add a custom pizza:\n  add <order number> custompizza <size> <topping 1> <topping 2> ...\n\nExamples:\n  add 1 pizza pepperoni\n  add 1 drink coke\n  add 1 custompizza large beef mushrooms olives'
         print(add_helper(parse(arg)))
 
     def do_remove(self, arg):
-        'Remove 1 item from the cart:  remove <order number> <category> <name>'
+        'Remove 1 specified item from the cart:  remove <order number> <category> <name>'
         print(remove_helper(parse(arg)))
 
     def do_cancel(self, arg):
-        'Cancel order'
+        'Cancel order: cancal <order number>'
         print(cancel_helper(parse(arg)))
 
     def do_q(self, arg):
-        'exit the shell:  q'
+        'Exit the shell:  q'
         print('Thank you for visiting Pizza Parlour. Please come again.\n')
         self.close()
         return True
@@ -89,9 +88,10 @@ def menu_helper(L):
     # full menu
     else:
         try:
-            res = "The full menu:"
+            res = "      Menu\n"
             for category in ["/pizzas", "/toppings", "/drinks"]:
-                res += "\n" + category[1:] + "\n" + format(requests.get(url + category).json())
+                res += "\n     " + category[1:-1] + "\n" + \
+                    format(requests.get(url + category).json())
         except:
             res = "Server failed to send menu."
     return res
@@ -101,6 +101,8 @@ def add_helper(L):
     res = ""
     if len(L) < 3:
         res = "Please specify order number, category and item name. E.g. add 1 drink coke, add 1 custompizza small beef"
+    elif not L[0].isdigit():
+        res = "Please provide an order number. Type \"? add\" to learn more"
     else:
         order_number, category, name = L[0], L[1], L[2]
         if category not in ["topping", "pizza", "drink", "custompizza"]:
@@ -113,6 +115,7 @@ def add_helper(L):
             elif category == "drink":
                 d = drinkPrices
             try:
+                # add a custom pizza
                 if category == "custompizza":
                     toppings = L[3:]
                     toppings_json_list = []
@@ -122,6 +125,7 @@ def add_helper(L):
 
                     item = {"size": {"name": name,
                                      "price": d[name]}, "toppings": toppings_json_list}
+                # add a drink or a predefined pizza
                 else:
                     item = {"name": name, "price": d[name]}
                 r = requests.post(
@@ -134,18 +138,18 @@ def add_helper(L):
 
 def remove_helper(args):
     if len(args) != 3:
-        return "Please specify order number, category, and name. E.g. remove 1 drink coke"
+        return "Please specify order number, category, and name. E.g. remove 1 drink coke, remove 1 custompizza small"
     else:
         try:
             order_number, category, name = args[0], args[1], args[2]
             if category not in ["topping", "pizza", "drink", "custompizza"]:
-                return "Please enter one of the following as category:  pizza  topping  drink custompizza"
+                return "Please enter one of the following as category:  pizza  topping  drink  custompizza"
             item = {"name": name}
             r = requests.delete(
                 "http://127.0.0.1:5000/order/" + order_number + "/" + category, headers=HEADERS, json=item)
             return r.text
         except:
-            "Remove 1 item from the cart:  remove <order number> <category> <name>"
+            return "Remove 1 item from the cart:  remove <order number> <category> <name>"
 
 
 def cancel_helper(args):
