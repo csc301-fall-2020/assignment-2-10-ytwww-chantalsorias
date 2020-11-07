@@ -1,15 +1,16 @@
-# Instructions
+# Instructions about Testing and Starting
 Please have the following packages installed before starting: `flask`, `pytest`, `pytest-cov`, `requests`.  
-Run the main Flask module by running `python3 PizzaParlour.py`  
-Run the Shell module by running `python3 Shell.py`  
-Run tests with coverage by running `pytest --cov-report term --cov=. tests/unit_tests.py`  
-## How to interact with Pizza Shell
+- To run tests with coverage, type `pytest --cov-report term --cov=. tests/unit_tests.py`  
+- To run the app:
+  - First, run the main Flask module by running `python3 PizzaParlour.py`.
+  - Then, run the Shell module by running `python3 Shell.py`  
+# How to interact with Pizza Shell
 - `?` or `help` list all commands
 
 - `? <cmd>` or `help <cmd>` display guide about `<cmd>`
   - Examples: `? add`, `help menu`
 
-- `new` starts a new order, will return `<order number>`.
+- `new` starts a new order, will return `<order-number>`.
 
 - `menu` shows full menu
 
@@ -28,9 +29,9 @@ Run tests with coverage by running `pytest --cov-report term --cov=. tests/unit_
   - `<category>` is one of `pizza`, `drink`.
   - Examples: `add 1 drink coke`, `add 1 pizza neapolitan`
 
-- `add <order-number> custompizza <size> <topping 1> <topping 2> ...` adds a custom pizza to the order with `<order number>`.
+- `add <order-number> custompizza <size> <topping-1> <topping-2> ...` adds a custom pizza to the order with `<order-number>`.
   - `<size>` is one of `small`, `medium`, `large`.
-  - `<topping n>` is one of `olives`, `tomatoes`, `mushrooms`, `jalapenos`, `chicken`, `beef`, `pepperoni`.
+  - `<topping-n>` is one of `olives`, `tomatoes`, `mushrooms`, `jalapenos`, `chicken`, `beef`, `pepperoni`.
   - Example: `add 1 custompizza large beef olives mushrooms`
 
 - `remove <order-number> <category> <name>` removes a specified item from the cart of the order with `<order-number>`.
