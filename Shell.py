@@ -157,7 +157,7 @@ def remove_helper(args):
         try:
             order_number, category, name = args[0], args[1], args[2]
             if category not in ["topping", "pizza", "drink", "custompizza"]:
-                return "Please enter one of the following as category:  pizza  topping  drink  custompizza"
+                return "Please enter one of the following as category:  pizza  drink  custompizza"
             item = {"name": name}
             r = requests.delete(
                 "http://127.0.0.1:5000/order/" + order_number + "/" + category, headers=HEADERS, json=item)

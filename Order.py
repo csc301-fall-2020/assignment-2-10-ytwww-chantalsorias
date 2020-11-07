@@ -23,6 +23,7 @@ class Orders:
         self.orders.append(new_order)
         self.current_order_number += 1
         return new_order
+        
 
 
 class Order:
@@ -63,6 +64,8 @@ class Order:
         for topping in toppings:
             display_toppings[topping.name] = topping.price
         return display_toppings
+
+    
 
 
 class OrderItem:
