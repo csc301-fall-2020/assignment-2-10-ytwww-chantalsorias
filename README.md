@@ -1,20 +1,45 @@
 # Instructions
+Please have the following packages installed before starting: `flask`, `pytest`, `pytest-cov`, `requests`.  
+Run the main Flask module by running `python3 PizzaParlour.py`  
+Run the Shell module by running `python3 Shell.py`  
+Run tests with coverage by running `pytest --cov-report term --cov=. tests/unit_tests.py`  
+## How to interact with Pizza Shell
+- `?` or `help` list all commands
 
-Run the main Flask module by running `python3 PizzaParlour.py`
-Run the Shell module by running `python3 Shell.py`
-In the Shell terminal, you can use the folwing commands:
-`menu` : get the full menu
-`menu pizza` : get the pizza menu
-`menu drink` : get the drink menu
-`menu topping` : get the topping menu
-`new` : start a new order and get an order number
-`add <order-number> pizza <pizza-name>` : to add a predefined pizza to the order
-`add <order-number> drink <drink-name>` : to add a drink to the order
-`remove <order-number> pizza <pizza-name>` : to remove a drink from the order
-`remove <order-number> drink <drink-name>` : to remove a predefined pizza from the order
-`cancel <order-number>` : to cancel the order
+- `? <cmd>` or `help <cmd>` display guide about `<cmd>`
+  - Examples: `? add`, `help menu`
 
-Run unit tests with coverage by running `pytest --cov-report term --cov=. tests/unit_tests.py`
+- `new` starts a new order, will return `<order number>`.
+
+- `menu` shows full menu
+
+- `menu <category>` shows menu by category. 
+  - `<category>` is one of `pizza`, `topping`, `drink`.
+  - Examples: `menu pizza`, `menu drink`, `menu topping`
+
+- `menu <category> <name>` shows price for a specific item.
+  - `<category>` is one of `pizza`, `topping`, `drink`.
+  - Examples: `menu pizza neapolitan`, `menu drink juice`, `menu topping jalapenos`
+
+- `cart <order-number>` shows the cart of the order with `<order-number>`.
+  - Example: `cart 1`
+
+- `add <order-number> <category> <name>` adds a drink or a predefined pizza to the order with `<order-number>`.
+  - `<category>` is one of `pizza`, `drink`.
+  - Examples: `add 1 drink coke`, `add 1 pizza neapolitan`
+
+- `add <order-number> custompizza <size> <topping 1> <topping 2> ...` adds a custom pizza to the order with `<order number>`.
+  - `<size>` is one of `small`, `medium`, `large`.
+  - `<topping n>` is one of `olives`, `tomatoes`, `mushrooms`, `jalapenos`, `chicken`, `beef`, `pepperoni`.
+  - Example: `add 1 custompizza large beef olives mushrooms`
+
+- `remove <order-number> <category> <name>` removes a specified item from the cart of the order with `<order-number>`.
+  - Examples: `remove 1 drink coke`, `remove 1 pizza neapolitan`
+
+- `cancel <order-number>` cancels the order with `<order number>`
+  - Example: `cancel 2`
+
+- `q` exits the shell.
 
 # Pair Programming
 
@@ -30,3 +55,5 @@ Ya-Tzu was the driver for adding items to the order. This involved working on th
 # Program design
 
 We chose to respresent items using classes. MenuItem is a parent class with "name" and "price" attributes. Drink, Pizza, Topping, and CustomPizza are children classes of MenuItem. We decided this because we found that every item has a name and price. CustomPizza has more attributes such as "size" and "toppings". When a user adds a custom pizza to the other, we must also know the toppings they want included. Pizza which is predefined already has predefined toppings. For the "price" attribute, we needed to use a function to calculate it because every custom pizza could be different and therefore depends on its size and toppings.
+
+# Code Craftsmanship
