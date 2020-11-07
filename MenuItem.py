@@ -15,18 +15,21 @@ class Menu:
 
     def find_pizza(self, pizza_name):
         for pizza in self.pizzas:
-            if pizza.name == pizza_name:
-                return pizza
+            if pizza.name.lower() == pizza_name.lower():
+                return pizza.serialize()
+        return "Pizza does not exist"
 
     def find_drink(self, drink_name):
         for drink in self.drinks:
-            if drink.name == drink_name:
-                return drink
+            if drink.name.lower() == drink_name.lower():
+                return drink.serialize()
+        return "Drink does not exist"
 
     def find_topping(self, topping_name):
         for topping in self.toppings:
-            if topping.name == topping_name:
-                return topping
+            if topping.name.lower() == topping_name.lower():
+                return topping.serialize()
+        return "Topping does not exist"
 
     def get_menu_items(self):
         menu = {}

@@ -51,7 +51,7 @@ class Order:
             else:
                 # If a custom pizza, display toppings
                 if hasattr(item, "toppings"):
-                    items_in_order[item.name] = {
+                    items_in_order[item.name] = {"size": item.size.serialize(),
                         "toppings": self.display_toppings(item.toppings), "price": item.price, "quantity": 1}
                 else:
                     items_in_order[item.name] = {

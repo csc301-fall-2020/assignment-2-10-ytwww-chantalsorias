@@ -28,17 +28,26 @@ def get_menu_items():
 
 @app.route('/menu/pizzas/<pizza_name>')
 def get_pizza_price(pizza_name):
-    return str(menu.find_pizza(pizza_name).price)
+    pizza = menu.find_pizza(pizza_name)
+    if "price" in pizza:
+        return str(pizza["price"])
+    return pizza
 
 
 @app.route('/menu/drinks/<drink_name>')
 def get_drink_price(drink_name):
-    return str(menu.find_drink(drink_name).price)
+    drink = menu.find_drink(drink_name)
+    if "price" in drink:
+        return str(drink["price"])
+    return drink
 
 
 @app.route('/menu/toppings/<topping_name>')
 def get_topping_price(topping_name):
-    return str(menu.find_topping(topping_name).price)
+    topping = menu.find_topping(topping_name)
+    if "price" in topping:
+        return str(topping["price"])
+    return topping
 
 
 @app.route('/menu/pizzas')
