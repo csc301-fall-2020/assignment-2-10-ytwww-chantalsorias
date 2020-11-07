@@ -17,15 +17,11 @@ class PizzaShell(cmd.Cmd):
 
     def do_new(self, arg):
         'Start a new order:  new'
-        print("New order started:")
-        print(requests.get("http://127.0.0.1:5000/order").text)
+        print(new_helper(parse(arg)))
 
-    def do_cart(self, n):
+    def do_cart(self, arg):
         'View the cart:  cart <order number>'
-        if n:
-            print(requests.get("http://127.0.0.1:5000/order/" + str(n)).text)
-        else:
-            print("Please enter your order number.")
+        print(cart_helper(parse(arg)))
 
     def do_add(self, arg):
         'Add an item to the cart\n\n- To add a drink or a predefined pizza:\n  add <order number> <category> <name>\n- To add a custom pizza:\n  add <order number> custompizza <size> <topping 1> <topping 2> ...\n\nExamples:\n  add 1 pizza pepperoni\n  add 1 drink coke\n  add 1 custompizza large beef mushrooms olives'
@@ -50,6 +46,10 @@ class PizzaShell(cmd.Cmd):
             self.file.close()
             self.file = None
 
+    def emptyline(self):
+        'Prevent input from being executing again'
+        return
+
 
 def parse(arg):
     'Convert the user input to a list'
@@ -62,6 +62,20 @@ def format(d):
     for key in d:
         res += "%-12s%-12s\n" % (key, d[key])
     return res
+
+
+def new_helper(L):
+    if len(L) == 0:
+        return "New order started:\n" + requests.get("http://127.0.0.1:5000/order").text
+    else:
+        return "usage: new"
+
+
+def cart_helper(L):
+    if len(L) == 1 and L[0].isdigit():
+        return requests.get("http://127.0.0.1:5000/order/" + L[0]).text
+    else:
+        return "usage: cart <order number>"
 
 
 def menu_helper(L):
@@ -149,7 +163,7 @@ def remove_helper(args):
                 "http://127.0.0.1:5000/order/" + order_number + "/" + category, headers=HEADERS, json=item)
             return r.text
         except:
-            return "Remove 1 item from the cart:  remove <order number> <category> <name>"
+            return "Usage: remove <order number> <category> <name>"
 
 
 def cancel_helper(args):
@@ -161,7 +175,7 @@ def cancel_helper(args):
             r = requests.delete("http://127.0.0.1:5000/order/" + order_number)
             return r.text
         except:
-            return "Please enter a valid order number."
+            return "Usage: cancel <order number>"
 
 
 if __name__ == '__main__':
