@@ -33,6 +33,8 @@ def test_add_wrong_category():
     assert s.add_helper(["1", "dessert", "coke"]
                         ) == "Please enter one of the following as category:  pizza  topping  drink custompizza"
 
+
+
 # Tests for server
 def test_pizza():
     response = app.test_client().get('/pizza')
