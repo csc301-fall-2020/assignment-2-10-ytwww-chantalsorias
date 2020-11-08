@@ -15,6 +15,14 @@ order_number = 1
 order_items = []
 orders = Orders()
 
+
+def format(d):
+    'Convert a dict to a more readible format'
+    res = ""
+    for key in d:
+        res += "%-12s%-12s\n" % (key, d[key])
+    return res
+
 # routes
 @app.route('/pizza')
 def welcome_pizza():
@@ -23,7 +31,11 @@ def welcome_pizza():
 
 @app.route('/menu')
 def get_menu_items():
-    return menu.get_menu_items()
+    res = "      Menu\n"
+    menus = menu.get_menu_items()
+    for title in menus:
+        res += "\n     " + title + "\n" + format(menus[title])
+    return res
 
 
 @app.route('/menu/pizzas/<pizza_name>')
@@ -52,27 +64,24 @@ def get_topping_price(topping_name):
 
 @app.route('/menu/pizzas')
 def get_pizzas():
-    return menu.get_pizzas()
+    return format(menu.get_pizzas())
 
 
 @app.route('/menu/drinks')
 def get_drinks():
-    return menu.get_drinks()
-
-# order routes
+    return format(menu.get_drinks())
 
 
 @app.route('/menu/toppings')
 def get_toppings():
-    return menu.get_toppings()
+    return format(menu.get_toppings())
 
+# order routes
 # Create a new order
-
-
 @app.route('/order')
 def new_order():
     new_order = orders.new_order()
-    return "Your order number is " + str(new_order.order_number)
+    return "New order started:\nYour order number is " + str(new_order.order_number)
 
 
 @app.route('/order/<order_number>', methods=['GET', 'DELETE'])

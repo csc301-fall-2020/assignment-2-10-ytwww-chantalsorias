@@ -1,4 +1,4 @@
-from PizzaParlour import app
+from PizzaParlour import app, format
 from MenuItem import Drink, Pizza, CustomPizza
 import Shell as s
 import json
@@ -11,17 +11,20 @@ def test_parse():
         "1", "drink", "drpepper"]
 
 def test_format():
-    assert s.format({"vegetarian": "3.99", "margherita": "7.99"}
+    assert format({"vegetarian": "3.99", "margherita": "7.99"}
                     ) == "%-12s%-12s\n%-12s%-12s\n" % ("vegetarian", "3.99", "margherita", "7.99")
 
 # Tests for menu
+def test_menu_too_many_arguments():
+    assert s.menu_helper(["drink", "coke", "water"]) == "Please type \"? menu\" to see usage."
+
 def test_menu_wrong_category():
     assert s.menu_helper(
         ["dessert"]) == "Please enter one of the following as category:  pizza  topping  drink"
 
-def test_new_wrong_input():
-    assert s.add_helper(
-        ["drink", "coke"]) == "Please specify order number, category and item name. E.g. add 1 drink coke, add 1 custompizza small beef"
+def test_menu_wrong_item_name():
+    assert s.menu_helper(
+        ["drink", "rootbeer"]) == "Please enter a valid item name."
 
 # Tests for add
 def test_add_incomplete_input():
@@ -33,6 +36,11 @@ def test_add_wrong_category():
     assert s.add_helper(["1", "dessert", "coke"]
                         ) == "Please enter one of the following as category:  pizza  topping  drink custompizza"
 
+def test_cart_wrong_input():
+    assert s.cart_helper([]) == "usage: cart <order number>"
+
+def test_new_order_wrong_input():
+    assert s.new_helper(["10"]) == "usage: new"
 
 
 # Tests for server

@@ -4,6 +4,7 @@ import requests
 from Prices import drinkPrices, toppingPrices, pizzaPrices
 
 HEADERS = {'Content-Type': 'application/json'}
+CATEGORIES = ["topping", "pizza", "drink"]
 
 
 class PizzaShell(cmd.Cmd):
@@ -56,17 +57,9 @@ def parse(arg):
     return ((arg.lower()).replace('.', '')).split()
 
 
-def format(d):
-    'Convert a dict to a more readible format'
-    res = ""
-    for key in d:
-        res += "%-12s%-12s\n" % (key, d[key])
-    return res
-
-
 def new_helper(L):
     if len(L) == 0:
-        return "New order started:\n" + requests.get("http://127.0.0.1:5000/order").text
+        return requests.get("http://127.0.0.1:5000/order").text
     else:
         return "usage: new"
 
@@ -79,36 +72,29 @@ def cart_helper(L):
 
 
 def menu_helper(L):
+    # base route to get full menu
     url = "http://127.0.0.1:5000/menu"
-    res = ""
-    if 1 <= len(L) <= 2:
-        category = L[0]
-        if category in ["topping", "pizza", "drink"]:
-            route = "/" + category + "s"
-            # price for a specified item
-            if len(L) == 2:
-                try:
-                    res = requests.get(url + route + "/" + L[1]).text
-                except:
-                    res = "Please enter a valid item name."
-            # menu by category
-            else:
-                try:
-                    res = format(requests.get(url + route).json())
-                except:
-                    res = "Server failed to send menu."
-        else:
-            res = "Please enter one of the following as category:  pizza  topping  drink"
-    # full menu
-    else:
-        try:
-            res = "      Menu\n"
-            for category in ["/pizzas", "/toppings", "/drinks"]:
-                res += "\n     " + category[1:-1] + "\n" + \
-                    format(requests.get(url + category).json())
-        except:
-            res = "Server failed to send menu."
-    return res
+    length = len(L)
+    # wrong number of arguments
+    if length > 2:
+        return "Please type \"? menu\" to see usage."
+    # wrong category
+    elif length >= 1 and L[0] not in CATEGORIES:
+        return "Please enter one of the following as category:  pizza  topping  drink"
+    # correct category but wrong item name
+    elif length == 2 and not isValidItem(L[1]):
+        return "Please enter a valid item name."
+    # route to get menu by category
+    elif length == 1:
+        url += "/" + L[0] + "s"
+    # route to get item price
+    elif length == 2:
+        url += "/" + L[0] + "s/" + L[1]
+    # ask server for menu
+    try:
+        return requests.get(url).text
+    except:
+        return "Server failed to send menu."
 
 
 def add_helper(L):
@@ -178,5 +164,10 @@ def cancel_helper(args):
             return "Usage: cancel <order number>"
 
 
+def isValidItem(name):
+    return (name in drinkPrices) or (name in pizzaPrices) or (name in toppingPrices)
+
+
 if __name__ == '__main__':
+    print(isValidItem('pepperoni'))
     PizzaShell().cmdloop()

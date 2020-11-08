@@ -9,7 +9,7 @@ class Menu:
 
     def add_drink(self, drink):
         self.drinks.append(drink)
-    
+
     def add_topping(self, topping):
         self.toppings.append(topping)
 
@@ -32,14 +32,9 @@ class Menu:
         return "Topping does not exist"
 
     def get_menu_items(self):
-        menu = {}
-        for item in self.pizzas:
-            menu[item.name] = item.price
-        for item in self.drinks:
-            menu[item.name] = item.price
-        for item in self.toppings:
-            menu[item.name] = item.price
-        return menu
+        menus = {"pizza": self.get_pizzas(), "topping": self.get_toppings(),
+                 "drink": self.get_drinks()}
+        return menus
 
     def get_pizzas(self):
         pizzas = {}
@@ -113,6 +108,7 @@ class CustomPizza(MenuItem):
 
     def serialize(self):
         return {"size": {"name": self.size, "price": self.price, "toppings": self.toppings}}
+
 
 def merge_two_dicts(x, y):
     z = x.copy()
