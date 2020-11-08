@@ -8,7 +8,7 @@ Please have the following packages installed before starting: `flask`, `pytest`,
 - `?` or `help` list all commands
 
 - `? <cmd>` or `help <cmd>` display guide about `<cmd>`
-  - Examples: `? add`, `help menu`
+  - Examples: `? add`, `? checkout`, `help menu`
 
 - `new` starts a new order, will return `<order-number>`
 
@@ -20,33 +20,46 @@ Please have the following packages installed before starting: `flask`, `pytest`,
 
 - `menu <category> <name>` shows price for a specific item.
   - `<category>` is one of `pizza`, `topping`, `drink`.
-
-  - Examples: `menu pizza neapolitan`, `menu drink juice`, `menu topping jalapenos`
+    - For `<category>` `pizza`, `<name>` is one of `small`, `medium`, `large`, `pepperoni`, `margherita`, `vegetarian`, `neapolitan`
+    - For `<category>` `topping`, `<name>` is one of `olives`, `tomatoes`, `mushrooms`, `jalapenos`, `chicken`, `beef`, `pepperoni`
+    - For `<category>` `drink`, `<name>` is one of `coke`, `dietcoke`, `cokezero`, `pepsi`, `dietpepsi`, `drpepper`, `water`, `juice`
+  - Examples: `menu pizza neapolitan`, `menu pizza small`, `menu drink juice`, `menu topping jalapenos`
 
 - `cart <order-number>` shows the cart of the order with `<order-number>`
   - Example: `cart 1`
 
-- `add <order-number> <category> <name>` adds a drink or a predefined pizza to the order with `<order-number>`
-  - `<category>` is one of `pizza`, `drink`.
-  - Examples: `add 1 drink coke`, `add 1 pizza neapolitan`
+- `add <order-number> drink <name>` adds a drink to the order with `<order-number>`
+  - `<name>` is one of `coke`, `dietcoke`, `cokezero`, `pepsi`, `dietpepsi`, `drpepper`, `water`, `juice`
+  - Example: `add 1 drink coke`
+
+- `add <order-number> pizza <name> <size>` adds a predefined pizza to the order with `<order-number>`
+  - `<name>` is one of `pepperoni`, `margherita`, `vegetarian`, `neapolitan`
+  - `<size>` is one of `small`, `medium`, `large`.
+  - Example: `add 1 pizza neapolitan large`
 
 - `add <order-number> custompizza <size> <topping-1> <topping-2> ...` adds a custom pizza to the order with `<order-number>`
   - `<size>` is one of `small`, `medium`, `large`.
   - `<topping-n>` is one of `olives`, `tomatoes`, `mushrooms`, `jalapenos`, `chicken`, `beef`, `pepperoni`
   - Example: `add 1 custompizza large beef olives mushrooms`
 
-- `remove <order-number> <category> <name>` removes a specified item from the cart of the order with `<order-number>`
+- `checkout <order-number> pickup`
+  - Example: `checkout 1 pickup`
+
+- `checkout <order-number> delivery <carrier> (<address>)`
+  - `<carrier>` is one of `inhouse`, `foodora`, `ubereats`
+  - Example: `checkout 2 delivery inhouse (6301 Silver Dart Dr, Mississauga, ON L5P 1B2)`
+
+- `remove <order-number> <category> <name>` removes a drink or a preset pizza from the cart of the order with `<order-number>`
+  - `<category>` is one of `drink`, `pizza`
   - Examples: `remove 1 drink coke`, `remove 1 pizza neapolitan`
+
+- `remove <order-number> custompizza <size>` removes a custom pizza from the cart of the order with `<order-number>`
+  - Example: `remove 1 custompizza large`
 
 - `cancel <order-number>` cancels the order with `<order number>`
   - Example: `cancel 2`
 
 - `q` exits the shell.
-  
-Note:
-- For `<category>` `pizza`, `<name>` is one of `small`, `medium`, `large`, `pepperoni`, `margherita`, `vegetarian`, `neapolitan`
-- For `<category>` `topping`, `<name>` is one of `olives`, `tomatoes`, `mushrooms`, `jalapenos`, `chicken`, `beef`, `pepperoni`
-- For `<category>` `drink`, `<name>` is one of `coke`, `dietcoke`, `cokezero`, `pepsi`, `dietpepsi`, `drpepper`, `water`, `juice`
 
 # Pair Programming
 
