@@ -1,6 +1,8 @@
 import cmd
 import sys
 import requests
+import csv
+import io
 from Prices import drinkPrices, toppingPrices, pizzaPrices
 
 HEADERS = {'Content-Type': 'application/json'}
@@ -118,10 +120,13 @@ def add_helper(L):
         toppings = L[3:]
         toppings_json_list = []
         for top in toppings:
-            top_json = {"name": top, "price": toppingPrices[top]}
-            toppings_json_list.append(top_json)
-        item = {"size": {"name": name,
-                         "price": pizzaPrices[name]}, "toppings": toppings_json_list}
+            if isValidItem("topping", top):
+                top_json = {"name": top, "price": toppingPrices[top]}
+                toppings_json_list.append(top_json)
+            else:
+                return "Topping " + top + " does not exist."
+        item = {"size": {"name": size,
+                         "price": pizzaPrices[size]}, "toppings": toppings_json_list}
     else:
         return "Please type \"? add\" to see usage."
     # server call
@@ -136,16 +141,41 @@ def checkout_helper(L):
         return "Please type \"? checkout\" to see usage."
     # pickup
     elif len(L) == 2 and L[1] == "pickup":
-        return L  # TODO
+        item = {"order_number": int(L[0])}
+        try:
+            return requests.post("http://127.0.0.1:5000/checkout/pickup", headers=HEADERS, data=item).text
+        except:
+            return "Server failed to checkout."
     # delivery
     elif len(L) == 4 and L[1] == "delivery" and L[2] in ["inhouse", "foodora", "ubereats"]:
-        address = L[3]
-        if L[2] == "inhouse":
-            return L[2], address  # TODO
-        elif L[2] == "foodora":
-            return L[2], address  # TODO
-        else:
-            return L[2], address  # TODO
+        orderNum, carrier, address = L[0], L[2], L[3]
+        item = {"order_number": int(
+            L[0]), "carrier": carrier, "address": address}
+        try:
+            details = requests.get(
+                "http://127.0.0.1:5000/order/" + orderNum).text
+            item["order_details"] = details
+            # foodora requires data in csv format
+            if carrier == "foodora":
+                try:
+                    csv_columns = ['order_number', "carrier",
+                                   'address', 'order_details']
+                    csvfile = io.StringIO()
+                    writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+                    writer.writeheader()
+                    writer.writerow(item)
+                    csv_string = csvfile.getvalue()
+                    return requests.post("http://127.0.0.1:5000/checkout/" + carrier, headers=HEADERS, data=csv_string).text
+                except:
+                    return "Server failed to checkout."
+            # send json for Ubereats and inhouse delivery
+            else:
+                try:
+                    return requests.post("http://127.0.0.1:5000/checkout/" + carrier, headers=HEADERS, json=item).text
+                except:
+                    return "Server failed to checkout."
+        except:
+            return "Server failed to retrieve order details."
     else:
         return "Please type \"? checkout\" to see usage."
 

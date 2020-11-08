@@ -177,9 +177,12 @@ def add_custom_pizza_to_order(order_number):
 
 
 # ---------- checkout routes ----------
+@app.route('/checkout/pickup', methods=['POST'])
+def pickup_checkout():
+    if request.method == 'POST':
+        return "Pickup"
 
-
-@app.route('/checkout/in-house', methods=['POST'])
+@app.route('/checkout/inhouse', methods=['POST'])
 def in_house_checkout():
     if request.method == 'POST':
         return checkout(request, "in-house delivery")
