@@ -46,25 +46,25 @@ def get_menu_items():
 @app.route('/menu/pizzas/<pizza_name>')
 def get_pizza_price(pizza_name):
     pizza = menu.find_pizza(pizza_name)
-    if "price" in pizza.serialize():
-        return str(pizza.price)
-    return pizza
+    if (not pizza):
+        return "Pizza does not exist", 400
+    return str(pizza.price)
 
 
 @app.route('/menu/drinks/<drink_name>')
 def get_drink_price(drink_name):
     drink = menu.find_drink(drink_name)
-    if "price" in drink.serialize():
-        return str(drink.price)
-    return drink
+    if (not drink):
+        return "Drink does not exist", 400
+    return str(drink.price)
 
 
 @app.route('/menu/toppings/<topping_name>')
 def get_topping_price(topping_name):
     topping = menu.find_topping(topping_name)
-    if "price" in topping.serialize():
-        return str(topping.price)
-    return topping
+    if (not topping):
+        return "Topping does not exist", 400
+    return str(topping.price)
 
 
 @app.route('/menu/pizzas')
@@ -94,8 +94,8 @@ def new_order():
 def get_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
-    if isinstance(order, str):
-        return order, 400
+    if (not order):
+        return "order does not exist", 400
     # If GET, display items in order
     if request.method == 'GET':
         return order.display_items()
@@ -109,8 +109,8 @@ def get_order(order_number):
 def add_drink_to_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
-    if isinstance(order, str):
-        return order, 400
+    if (not order):
+        return "order does not exist", 400
     # Add drink if POST
     req_data = request.get_json()
     drink_name = req_data['name']
@@ -128,17 +128,22 @@ def add_drink_to_order(order_number):
 def add_pizza_to_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
-    if isinstance(order, str):
-        return order, 400
+    if (not order):
+        return "order does not exist", 400
     # Add pizza if POST
     req_data = request.get_json()
     pizza_name = req_data['name']
     if request.method == 'POST':
         pizza_size = menu.find_pizza(req_data['size'])
+        if (not pizza_size):
+            return "Size does not exist", 400
         predefined_pizza = menu.find_pizza(pizza_name)
+        if (not predefined_pizza):
+            return "Pizza does not exist", 400
+
         # pizza_price = req_data['price']
         order.add_item(Pizza(predefined_pizza, pizza_size))
-        return str(pizza_size.name + " " + pizza_name) + " item added!"
+        return str(pizza_size.name + "-" + pizza_name) + " item added!"
     # Remove pizza if DELETE
     elif request.method == 'DELETE':
         order.remove_item(pizza_name)
@@ -149,8 +154,8 @@ def add_pizza_to_order(order_number):
 def add_custom_pizza_to_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
-    if isinstance(order, str):
-        return order, 400
+    if (not order):
+        return "order does not exist", 400
     # Add custom pizza if POST
     req_data = request.get_json()
     if request.method == 'POST':
@@ -191,8 +196,8 @@ def checkout(req_data, delivery_method):
     order_number = req_data['order_number']
     order = orders.find_order(int(order_number))
     # Check if order exists
-    if isinstance(order, str):
-        return order, 400
+    if (not order):
+        return "order does not exist", 400
     # Check if order has been checkout already
     if order.order_complete == True:
         return "Order " + str(order_number) + " is already complete", 400

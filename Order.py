@@ -16,7 +16,6 @@ class Orders:
         for order in self.orders:
             if order.order_number == order_number:
                 return order
-        return "order does not exist"
 
     def new_order(self):
         new_order = Order(self.current_order_number)

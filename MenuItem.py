@@ -17,19 +17,16 @@ class Menu:
         for pizza in self.pizzas:
             if pizza.name.lower() == pizza_name.lower():
                 return pizza
-        return "Pizza does not exist"
 
     def find_drink(self, drink_name):
         for drink in self.drinks:
             if drink.name.lower() == drink_name.lower():
                 return drink
-        return "Drink does not exist"
 
     def find_topping(self, topping_name):
         for topping in self.toppings:
             if topping.name.lower() == topping_name.lower():
                 return topping
-        return "Topping does not exist"
 
     def get_menu_items(self):
         menus = {"pizza": self.get_pizzas(), "topping": self.get_toppings(),
@@ -86,7 +83,7 @@ class Pizza(MenuItem):
         self.pizza_type = pizza_type
         self.size = size
         self.price = pizza_type.price + self.size.price
-        MenuItem.__init__(self, self.size.name + " " +
+        MenuItem.__init__(self, self.size.name + "-" +
                           pizza_type.name, self.price)
 
 
