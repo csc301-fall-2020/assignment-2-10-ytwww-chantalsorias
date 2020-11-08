@@ -23,13 +23,13 @@ class Orders:
         self.orders.append(new_order)
         self.current_order_number += 1
         return new_order
-        
 
 
 class Order:
     def __init__(self, order_number):
         self.order_number = order_number
         self.custom_pizza_number = 1
+        self.order_complete = False
         self.items = []
 
     def add_item(self, item):
@@ -53,7 +53,7 @@ class Order:
                 # If a custom pizza, display toppings
                 if hasattr(item, "toppings"):
                     items_in_order[item.name] = {"size": item.size.serialize(),
-                        "toppings": self.display_toppings(item.toppings), "price": item.price, "quantity": 1}
+                                                 "toppings": self.display_toppings(item.toppings), "price": item.price, "quantity": 1}
                 else:
                     items_in_order[item.name] = {
                         "price": item.price, "quantity": 1}
@@ -65,7 +65,11 @@ class Order:
             display_toppings[topping.name] = topping.price
         return display_toppings
 
-    
+    def checkout(self):
+        self.order_complete = True
+
+    def has_items(self):
+        return len(self.items) != 0
 
 
 class OrderItem:

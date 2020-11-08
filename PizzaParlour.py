@@ -24,9 +24,14 @@ def format(d):
     return res
 
 # routes
+
+
 @app.route('/pizza')
 def welcome_pizza():
     return 'Welcome to Pizza Planet!'
+
+
+# ---------- menu routes ----------
 
 
 @app.route('/menu')
@@ -41,24 +46,24 @@ def get_menu_items():
 @app.route('/menu/pizzas/<pizza_name>')
 def get_pizza_price(pizza_name):
     pizza = menu.find_pizza(pizza_name)
-    if "price" in pizza:
-        return str(pizza["price"])
+    if "price" in pizza.serialize():
+        return str(pizza.price)
     return pizza
 
 
 @app.route('/menu/drinks/<drink_name>')
 def get_drink_price(drink_name):
     drink = menu.find_drink(drink_name)
-    if "price" in drink:
-        return str(drink["price"])
+    if "price" in drink.serialize():
+        return str(drink.price)
     return drink
 
 
 @app.route('/menu/toppings/<topping_name>')
 def get_topping_price(topping_name):
     topping = menu.find_topping(topping_name)
-    if "price" in topping:
-        return str(topping["price"])
+    if "price" in topping.serialize():
+        return str(topping.price)
     return topping
 
 
@@ -76,8 +81,9 @@ def get_drinks():
 def get_toppings():
     return format(menu.get_toppings())
 
-# order routes
-# Create a new order
+# ---------- order routes ----------
+
+
 @app.route('/order')
 def new_order():
     new_order = orders.new_order()
@@ -89,7 +95,7 @@ def get_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
     if isinstance(order, str):
-        return order
+        return order, 400
     # If GET, display items in order
     if request.method == 'GET':
         return order.display_items()
@@ -104,7 +110,7 @@ def add_drink_to_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
     if isinstance(order, str):
-        return order
+        return order, 400
     # Add drink if POST
     req_data = request.get_json()
     drink_name = req_data['name']
@@ -123,14 +129,16 @@ def add_pizza_to_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
     if isinstance(order, str):
-        return order
+        return order, 400
     # Add pizza if POST
     req_data = request.get_json()
     pizza_name = req_data['name']
     if request.method == 'POST':
-        pizza_price = req_data['price']
-        order.add_item(Pizza(pizza_name, pizza_price))
-        return str(pizza_name) + " item added!"
+        pizza_size = menu.find_pizza(req_data['size'])
+        predefined_pizza = menu.find_pizza(pizza_name)
+        # pizza_price = req_data['price']
+        order.add_item(Pizza(predefined_pizza, pizza_size))
+        return str(pizza_size.name + " " + pizza_name) + " item added!"
     # Remove pizza if DELETE
     elif request.method == 'DELETE':
         order.remove_item(pizza_name)
@@ -142,7 +150,7 @@ def add_custom_pizza_to_order(order_number):
     order = orders.find_order(int(order_number))
     # Check if order exists
     if isinstance(order, str):
-        return order
+        return order, 400
     # Add custom pizza if POST
     req_data = request.get_json()
     if request.method == 'POST':
@@ -161,6 +169,43 @@ def add_custom_pizza_to_order(order_number):
         pizza_name = req_data['name']
         order.remove_item(pizza_name)
         return str(pizza_name) + " item removed!"
+
+
+# ---------- checkout routes ----------
+
+
+@app.route('/checkout/in-house', methods=['POST'])
+def in_house_checkout():
+    if request.method == 'POST':
+        return checkout(request, "in-house delivery")
+
+
+@app.route('/checkout/ubereats', methods=['POST'])
+def ubereats_checkout():
+    if request.method == 'POST':
+        return checkout(request, "UberEats")
+
+
+def checkout(req_data, delivery_method):
+    req_data = request.get_json()
+    order_number = req_data['order_number']
+    order = orders.find_order(int(order_number))
+    # Check if order exists
+    if isinstance(order, str):
+        return order, 400
+    # Check if order has been checkout already
+    if order.order_complete == True:
+        return "Order " + str(order_number) + " is already complete", 400
+    # Check if order has items
+    if not order.has_items():
+        return "Order " + str(order_number) + " does not have any items", 400
+    # Otherwise, checkout
+    order.checkout()
+    address = req_data['address']
+    order_details = req_data['order_details']
+    return "Order " + str(order_number) + " complete. Delivering to " + address + " via " + delivery_method
+
+#TODO: Foodora
 
 
 if __name__ == "__main__":

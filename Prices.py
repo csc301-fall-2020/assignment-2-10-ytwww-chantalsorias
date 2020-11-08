@@ -1,4 +1,4 @@
-from MenuItem import Pizza, Drink, Topping, Menu
+from MenuItem import PredefinedPizza, Pizza, Drink, Topping, Menu
 
 
 def priceReader(filename):
@@ -17,7 +17,7 @@ pizzaPrices = priceReader("pizzas.txt")
 menu = Menu()
 
 for key in pizzaPrices:
-    p = Pizza(key, pizzaPrices[key])
+    p = PredefinedPizza(key, pizzaPrices[key])
     menu.add_pizza(p)
 
 for key in drinkPrices:

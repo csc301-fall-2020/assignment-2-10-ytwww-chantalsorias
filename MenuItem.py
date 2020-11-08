@@ -16,19 +16,19 @@ class Menu:
     def find_pizza(self, pizza_name):
         for pizza in self.pizzas:
             if pizza.name.lower() == pizza_name.lower():
-                return pizza.serialize()
+                return pizza
         return "Pizza does not exist"
 
     def find_drink(self, drink_name):
         for drink in self.drinks:
             if drink.name.lower() == drink_name.lower():
-                return drink.serialize()
+                return drink
         return "Drink does not exist"
 
     def find_topping(self, topping_name):
         for topping in self.toppings:
             if topping.name.lower() == topping_name.lower():
-                return topping.serialize()
+                return topping
         return "Topping does not exist"
 
     def get_menu_items(self):
@@ -76,9 +76,18 @@ class Drink(MenuItem):
         MenuItem.__init__(self, name, price)
 
 
+class PredefinedPizza(MenuItem):
+    def __init__(self, name, price):
+        MenuItem.__init__(self, name, price)
+
+
 class Pizza(MenuItem):
-    def __init__(self, pizza_type, price):
-        MenuItem.__init__(self, pizza_type, price)
+    def __init__(self, pizza_type, size):
+        self.pizza_type = pizza_type
+        self.size = size
+        self.price = pizza_type.price + self.size.price
+        MenuItem.__init__(self, self.size.name + " " +
+                          pizza_type.name, self.price)
 
 
 class Topping(MenuItem):
