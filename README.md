@@ -74,6 +74,10 @@ Ya-Tzu was the driver for adding items to the order. This involved working on th
 
 # Program design
 
-We chose to respresent items using classes. MenuItem is a parent class with "name" and "price" attributes. Drink, Pizza, Topping, and CustomPizza are children classes of MenuItem. We decided this because we found that every item has a name and price. CustomPizza has more attributes such as "size" and "toppings". When a user adds a custom pizza to the other, we must also know the toppings they want included. Pizza which is predefined already has predefined toppings. For the "price" attribute, we needed to use a function to calculate it because every custom pizza could be different and therefore depends on its size and toppings.
+We chose to respresent items using classes. MenuItem is a parent class with "name" and "price" attributes. Drink, Pizza, Topping, and CustomPizza are children classes of MenuItem. We decided this because we found that every item has a name and price. Pizza which is predefined already has predefined toppings. CustomPizza has more attributes such as "size" and "toppings". When a user adds a custom pizza to the other, we must also know the toppings they want included. For the "price" attribute, we needed to use a function to calculate it because every custom pizza could be different and therefore depends on its size and toppings.    
+
+To comply with single-responsibility principle, we make sure that each module has its unique purpose. The Price module converts the text files containing product details to objects to be used by other modules. The prices are stored in text files to achieve persistence. The Menu module represents products, and the Order module deal with order-related functionalities. The PizzaParlour module is the server. The Shell module is the command-line interface that send requests to the server based on interactions with user input.
 
 # Code Craftsmanship
+For formatting code, we use VSCode's autopep8 formatter.  
+For linters, we use Pylint.
