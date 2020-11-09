@@ -143,7 +143,7 @@ def checkout_helper(L):
     elif len(L) == 2 and L[1] == "pickup":
         item = {"order_number": int(L[0])}
         try:
-            return requests.post("http://127.0.0.1:5000/checkout/pickup", headers=HEADERS, data=item).text
+            return requests.post("http://127.0.0.1:5000/checkout/pickup", headers=HEADERS, json=item).text
         except:
             return "Server failed to checkout."
     # delivery
