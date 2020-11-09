@@ -83,9 +83,3 @@ class Order:
         for item in self.items:
             price += item.price
         return round(price, 2)
-
-
-class OrderItem:
-    def __init__(self, order_number, item):
-        self.order_number = order_number
-        self.item = item

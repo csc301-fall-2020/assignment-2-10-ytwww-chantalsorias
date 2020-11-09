@@ -5,7 +5,7 @@ from MenuItem import Menu
 from MenuItem import CustomPizza
 from MenuItem import Size
 from MenuItem import Topping
-from Order import OrderItem, Orders
+from Order import Orders
 from Prices import menu
 import csv
 from io import StringIO
@@ -108,14 +108,17 @@ def get_order(order_number):
 
 
 @app.route('/order/<order_number>/drink', methods=['POST', 'DELETE'])
-def add_drink_to_order(order_number):
+def add_or_remove_drink(order_number):
     order = orders.find_order(int(order_number))
-    # Check if order exists
-    if (not order):
-        return "order does not exist", 400
-    # Check if order has been checked out
-    if order.order_complete:
-        return "Order " + str(order_number) + " is already complete", 400
+    # # Check if order exists
+    # if (not order):
+    #     return "order does not exist", 400
+    # # Check if order has been checked out
+    # if order.order_complete:
+    #     return "Order " + str(order_number) + " is already complete", 400
+    valid_error = is_valid_order(order)
+    if (valid_error):
+        return valid_error
     # Add drink if POST
     req_data = request.get_json()
     drink_name = req_data['name']
@@ -130,14 +133,17 @@ def add_drink_to_order(order_number):
 
 
 @app.route('/order/<order_number>/pizza', methods=['POST', 'DELETE'])
-def add_pizza_to_order(order_number):
+def add_or_remove_pizza(order_number):
     order = orders.find_order(int(order_number))
-    # Check if order exists
-    if (not order):
-        return "order does not exist", 400
-    # Check if order has been checked out
-    if order.order_complete:
-        return "Order " + str(order_number) + " is already complete", 400
+    # # Check if order exists
+    # if (not order):
+    #     return "order does not exist", 400
+    # # Check if order has been checked out
+    # if order.order_complete:
+    #     return "Order " + str(order_number) + " is already complete", 400
+    valid_error = is_valid_order(order)
+    if (valid_error):
+        return valid_error
     # Add pizza if POST
     req_data = request.get_json()
     pizza_name = req_data['name']
@@ -159,14 +165,17 @@ def add_pizza_to_order(order_number):
 
 
 @app.route('/order/<order_number>/custompizza', methods=['POST', 'DELETE'])
-def add_custom_pizza_to_order(order_number):
+def add_or_remove_custom_pizza(order_number):
     order = orders.find_order(int(order_number))
-    # Check if order exists
-    if (not order):
-        return "order does not exist", 400
-    # Check if order has been checked out
-    if order.order_complete:
-        return "Order " + str(order_number) + " is already complete", 400
+    # # Check if order exists
+    # if (not order):
+    #     return "order does not exist", 400
+    # # Check if order has been checked out
+    # if order.order_complete:
+    #     return "Order " + str(order_number) + " is already complete", 400
+    valid_error = is_valid_order(order)
+    if (valid_error):
+        return valid_error
     # Add custom pizza if POST
     req_data = request.get_json()
     if request.method == 'POST':
@@ -216,16 +225,22 @@ def foodora_checkout():
         order_number = csv_data_list[1][0]
         address = csv_data_list[1][2]
         order = orders.find_order(int(order_number))
-        # Check if order exists
-        if (not order):
-            return "order does not exist", 400
-        # Check if order has been checked out already
-        if order.order_complete:
-            return "Order " + str(order_number) + " is already complete", 400
-        # Check if order has items
-        if not order.has_items():
-            return "Order " + str(order_number) + " does not have any items", 400
+        # # Check if order exists
+        # if (not order):
+        #     return "order does not exist", 400
+        # # Check if order has been checked out already
+        # if order.order_complete:
+        #     return "Order " + str(order_number) + " is already complete", 400
+        # # Check if order has items
+        # if not order.has_items():
+        #     return "Order " + str(order_number) + " does not have any items", 400
         # Otherwise, checkout
+        valid_error = is_valid_order(order)
+        if (valid_error):
+            return valid_error
+        no_items_error = order_has_no_items(order)
+        if no_items_error:
+            return no_items_error
         subtotal, total = order.checkout()
         return "Order " + order_number + " complete. Delivering to " + address + " via Foodora. Subtotal is $" + str(subtotal) + ". Total is $" + str(total)
 
@@ -234,15 +249,22 @@ def checkout(req_data, checkout_method):
     req_data = request.get_json()
     order_number = req_data['order_number']
     order = orders.find_order(int(order_number))
-    # Check if order exists
-    if (not order):
-        return "order does not exist", 400
-    # Check if order has been checked out already
-    if order.order_complete:
-        return "Order " + str(order_number) + " is already complete", 400
-    # Check if order has items
-    if not order.has_items():
-        return "Order " + str(order_number) + " does not have any items", 400
+    valid_error = is_valid_order(order)
+    if (valid_error):
+        return valid_error
+    no_items_error = order_has_no_items(order)
+    if no_items_error:
+        return no_items_error
+    ord
+    # # Check if order exists
+    # if (not order):
+    #     return "order does not exist", 400
+    # # Check if order has been checked out already
+    # if order.order_complete:
+    #     return "Order " + str(order_number) + " is already complete", 400
+    # # Check if order has items
+    # if not order.has_items():
+    #     return "Order " + str(order_number) + " does not have any items", 400
     # Otherwise, checkout
     subtotal, total = order.checkout()
     if checkout_method == "pickup":
@@ -251,7 +273,20 @@ def checkout(req_data, checkout_method):
     address = req_data['address']
     return "Order " + str(order_number) + " complete. Delivering to " + address + " via " + checkout_method + ". Subtotal is $" + str(subtotal) + ". Total is $" + str(total)
 
-#TODO: Foodora
+
+def is_valid_order(order):
+    # Check if order exists
+    if (not order):
+        return "Order does not exist", 400
+    # Check if order has been checked out already
+    if order.order_complete:
+        return "Order " + str(order.order_number) + " is already complete", 400
+
+
+def order_has_no_items(order):
+    # Check if order has items
+    if not order.has_items():
+        return "Order " + str(order.order_number) + " does not have any items", 400
 
 
 if __name__ == "__main__":
