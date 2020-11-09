@@ -56,6 +56,11 @@ class Order:
                 else:
                     items_in_order[item.name] = {
                         "price": item.price, "quantity": 1}
+            subtotal = self.calculate_price()
+            total = subtotal * 1.13
+            items_in_order["subtotal"] = subtotal
+            items_in_order["total"] = round(total, 2)
+
         return items_in_order
 
     def display_toppings(self, toppings):
@@ -66,12 +71,15 @@ class Order:
 
     def checkout(self):
         self.order_complete = True
+        subtotal = self.calculate_price()
+        total = round(subtotal * 1.13, 2)
+        return subtotal, total
 
     def has_items(self):
         return len(self.items) != 0
 
-
-class OrderItem:
-    def __init__(self, order_number, item):
-        self.order_number = order_number
-        self.item = item
+    def calculate_price(self):
+        price = 0
+        for item in self.items:
+            price += item.price
+        return round(price, 2)
