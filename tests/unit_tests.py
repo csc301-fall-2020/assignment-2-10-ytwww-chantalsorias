@@ -221,7 +221,7 @@ def test_get_order():
     response = app.test_client().get('/order/1')
 
     assert response.status_code == 200
-    assert response.data == b'{"coke":{"price":1.88,"quantity":1},"custom_pizza 1":{"price":8.75,"quantity":1,"size":{"name":"small","price":6.25},"toppings":{"beef":2.5}},"small-neapolitan":{"price":11.98,"quantity":1},"subtotal":22.61,"total":25.55}\n'
+    assert response.data == b"[{'name': 'coke', 'price': 1.88}, {'name': 'small-neapolitan', 'size': {'name': 'small', 'price': 3.99}, 'price': 11.98}, {'name': 'custom_pizza 1', 'size': {'name': 'small', 'price': 6.25}, 'price': 8.75, 'toppings': [{'name': 'beef', 'price': 2.5}]}, {'subtotal': 22.61}, {'total': 25.55}]"
 
 
 def test_remove_pizza():

@@ -40,31 +40,17 @@ class Order:
                 self.items.remove(item)
                 break
 
-    def display_items(self):
-        items_in_order = {}
+    def get_items(self):
+        items_in_order = []
         for item in self.items:
-            if item.name in items_in_order:
-                items_in_order[item.name]["quantity"] += 1
-            else:
-                # If a custom pizza, display toppings
-                if hasattr(item, "toppings"):
-                    items_in_order[item.name] = {"size": item.size.serialize(),
-                                                 "toppings": self.display_toppings(item.toppings), "price": item.price, "quantity": 1}
-                else:
-                    items_in_order[item.name] = {
-                        "price": item.price, "quantity": 1}
-            subtotal = self.calculate_price()
-            total = subtotal * 1.13
-            items_in_order["subtotal"] = subtotal
-            items_in_order["total"] = round(total, 2)
+            items_in_order.append(item.serialize())
 
-        return items_in_order
+        subtotal = self.calculate_price()
+        total = round(subtotal * 1.13, 2)
+        items_in_order.append({"subtotal": subtotal})
+        items_in_order.append({"total": total})
 
-    def display_toppings(self, toppings):
-        display_toppings = {}
-        for topping in toppings:
-            display_toppings[topping.name] = topping.price
-        return display_toppings
+        return str(items_in_order)
 
     def checkout(self):
         self.order_complete = True
