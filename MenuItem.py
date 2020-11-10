@@ -13,17 +13,17 @@ class Menu:
     def add_topping(self, topping):
         self.toppings.append(topping)
 
-    def find_pizza(self, pizza_name):
+    def get_pizza(self, pizza_name):
         for pizza in self.pizzas:
             if pizza.name.lower() == pizza_name.lower():
                 return pizza
 
-    def find_drink(self, drink_name):
+    def get_drink(self, drink_name):
         for drink in self.drinks:
             if drink.name.lower() == drink_name.lower():
                 return drink
 
-    def find_topping(self, topping_name):
+    def get_topping(self, topping_name):
         for topping in self.toppings:
             if topping.name.lower() == topping_name.lower():
                 return topping
@@ -56,12 +56,6 @@ class MenuItem:
     def __init__(self, name, price):
         self.name = name
         self.price = price
-
-    def print_price(self):
-        print(self.price)
-
-    def __str__(self):
-        return "Name: " + self.name + " Price: " + str(self.price)
 
     def serialize(self):
         return {"name": self.name,
@@ -114,9 +108,3 @@ class CustomPizza(MenuItem):
 
     def serialize(self):
         return {"size": {"name": self.size, "price": self.price, "toppings": self.toppings}}
-
-
-def merge_two_dicts(x, y):
-    z = x.copy()
-    z.update(y)
-    return z

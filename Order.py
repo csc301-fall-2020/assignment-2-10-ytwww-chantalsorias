@@ -6,13 +6,10 @@ class Orders:
         self.orders = []
         self.current_order_number = 1
 
-    def add_order(self, order):
-        self.orders.append(order)
-
     def remove_order(self, order):
         self.orders.remove(order)
 
-    def find_order(self, order_number):
+    def get_order(self, order_number):
         for order in self.orders:
             if order.order_number == order_number:
                 return order
