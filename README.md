@@ -81,7 +81,7 @@ Please have the following packages installed before starting: `flask`, `pytest`,
 
 ## Process
 
-We used Zoom's screen sharing feature to do pair programming. We had 5 two-hour sessions where both of us experienced being a driver and a navigator at least twice. This can be seen in commits with a title starting with "driver" in the git hostory.
+We used Zoom's screen sharing feature to do pair programming. We had 5 two-hour sessions where both of us experienced being a driver and a navigator at least twice. This can be seen in commits with a title starting with "driver" in the git history.
 
 Chantal was the driver while Ya-Tzu was the navigator for removing an item and cancelling an order. This involved working on the remove and cancel functions in Shell.py. Testing it and then working on the tests in unit_tests.py.
 
@@ -95,20 +95,19 @@ Some negatives would be if the driver is perfectly capable of programming a feat
 
 ## Ya-Tzu's Reflection
 
-I have gained a greater understanding for how different modules work toghether.
+I have gained a greater understanding for how different modules work together.
 
 # Program design
 
-We chose to respresent items using classes. MenuItem is a parent class with "name" and "price" attributes. Drink, Pizza, Topping, and CustomPizza are children classes of MenuItem. We decided this because we found that every item has a name and price. Pizza which is predefined already has predefined toppings. CustomPizza has more attributes such as "size" and "toppings". When a user adds a custom pizza to the other, we must also know the toppings they want included. For the "price" attribute, we needed to use a function to calculate it because every custom pizza could be different and therefore depends on its size and toppings.
+The class MenuItem is designed with Factory Method in mind. MenuItem is a parent class with "name" and "price" attributes. The children classes of MenuItem includes Drink, PredefinedPizza, Pizza, and CustomPizza. We decided this because all products share similarities such as price and name. The parent class MenuItem takes care of basics such as representing products in serialization while the children classes adds on these functionalities with their special needs. One example is the child class CustomPizza that has the added attributes of "size" and "toppings". For the "price" attribute, we needed to use a function to calculate it because every custom pizza could be different and the price depends on its size and toppings.
 
-The class MenuItem is designed with Factory Method in mind. The children classes of MenuItem includes Drink, PredefinedPizza, and CustomPizza. Since all products share some similarities such as price and name. The parent class MenuItem takes care of basics such as representing products in string and serialization while the children classes adds on these functionalities with their special needs. One example is the child class CustomPizza that deals with different sizes and toppings.
+The class Orders is designed with Singleton design pattern. There is only one instance of the class Orders at all times. The Orders class keeps track of shared resources such as counter for a order number and all. Its purpose is to store a list of Order objects and responsibilities include creating, removing, and getting an order.
 
-The class Orders is designed with Singleton design pattern. There is only one instance of the class Orders at all times. The Orders class keeps track of shared resources such as counter for a order number and all.
-Its purpose is to store a list of Order objects. Responsibilities include creating, removing, and finding an order.
-
-We use Singleton as a design pattern for the Menu class as well, as it stores a list of MenuItem objects. Where its responsibilities include adding and getting MenuItems.
+We use Singleton as a design pattern for the Menu class as well, as there is only one instance during a run of the program. It stores a list of MenuItem objects and its responsibilities include adding and getting MenuItems.
 
 To comply with single-responsibility principle, we make sure that each module has its unique purpose. The Price module converts the text files containing product details to objects to be used by other modules. The prices are stored in text files to achieve persistence. The Menu module represents products, and the Order module deal with order-related functionalities. The PizzaParlour module is the server. The Shell module is the command-line interface that send requests to the server based on interactions with user input.
+
+Since all modules only perform specific related tasks then this means there is high cohesion. Therefore the methods relate to the intention of the class. The modules do not depend on each other. Order only requires items to have a price attribute in order to calculate total price of the order. This means there is low coupling and that changing something major in one class should not affect the other.
 
 # Code Craftsmanship
 
