@@ -67,6 +67,16 @@ class Drink(MenuItem):
         MenuItem.__init__(self, name, price)
 
 
+class Topping(MenuItem):
+    def __init__(self, name, price):
+        MenuItem.__init__(self, name, price)
+
+
+class Size(MenuItem):
+    def __init__(self, name, price):
+        MenuItem.__init__(self, name, price)
+
+
 class PredefinedPizza(MenuItem):
     def __init__(self, name, price):
         MenuItem.__init__(self, name, price)
@@ -80,15 +90,8 @@ class Pizza(MenuItem):
         MenuItem.__init__(self, self.size.name + "-" +
                           pizza_type.name, self.price)
 
-
-class Topping(MenuItem):
-    def __init__(self, name, price):
-        MenuItem.__init__(self, name, price)
-
-
-class Size(MenuItem):
-    def __init__(self, name, price):
-        MenuItem.__init__(self, name, price)
+    def serialize(self):
+        return {"name": self.name, "size": {"name": self.size.name, "price": self.size.price}, "price": self.price}
 
 
 class CustomPizza(MenuItem):
@@ -107,4 +110,10 @@ class CustomPizza(MenuItem):
         return price
 
     def serialize(self):
-        return {"size": {"name": self.size, "price": self.price, "toppings": self.toppings}}
+        return {"name": self.name, "size": {"name": self.size.name, "price": self.size.price}, "price": self.price, "toppings": self.get_all_toppings_serialized()}
+
+    def get_all_toppings_serialized(self):
+        topping_list = []
+        for topping in self.toppings:
+            topping_list.append(topping.serialize())
+        return topping_list

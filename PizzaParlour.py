@@ -100,7 +100,7 @@ def get_order(order_number):
         return "order does not exist", 400
     # If GET, display items in order
     if request.method == 'GET':
-        return order.display_items()
+        return order.get_items()
     # If DELETE, delete order
     if request.method == 'DELETE':
         orders.remove_order(order)
@@ -216,10 +216,10 @@ def ubereats_checkout():
 @app.route('/checkout/foodora', methods=['POST'])
 def foodora_checkout():
     if request.method == 'POST':
+        # Read csv
         csv_data = str(request.get_data()).split('\\n')
         x = csv.reader(csv_data)
         csv_data_list = list(x)
-        print(csv_data_list)
         order_number = csv_data_list[1][0]
         address = csv_data_list[1][2]
         order = orders.get_order(int(order_number))

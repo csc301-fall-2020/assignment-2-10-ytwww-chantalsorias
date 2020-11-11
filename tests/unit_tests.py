@@ -10,51 +10,6 @@ HEADERS = {'Content-Type': 'application/json'}
 # Tests for shell
 
 
-def test_shell_close():
-    shell = s.PizzaShell()
-    assert shell.do_q("") == True
-
-
-def test_shell_menu():
-    shell = s.PizzaShell()
-    assert shell.do_menu("") == None
-
-
-def test_shell_cart():
-    shell = s.PizzaShell()
-    assert shell.do_cart("1") == None
-
-
-def test_shell_new():
-    shell = s.PizzaShell()
-    assert shell.do_new("") == None
-
-
-def test_shell_add():
-    shell = s.PizzaShell()
-    assert shell.do_add("1 drink coke") == None
-
-
-def test_shell_remove():
-    shell = s.PizzaShell()
-    assert shell.do_remove("1 drink coke") == None
-
-
-def test_shell_checkout():
-    shell = s.PizzaShell()
-    assert shell.do_checkout("1 pickup") == None
-
-
-def test_shell_cancel():
-    shell = s.PizzaShell()
-    assert shell.do_cancel("1") == None
-
-
-def test_shell_emptyline():
-    shell = s.PizzaShell()
-    assert shell.emptyline() == None
-
-
 def test_parse():
     assert s.parse("   1    DrINK    DR.pepPer      ") == [
         "1", "drink", "drpepper"]
@@ -261,6 +216,50 @@ def test_delivery_json():
         "post", "http://127.0.0.1:5000/checkout/ubereats", item)
 
 
+def test_shell_close():
+    shell = s.PizzaShell()
+    assert shell.do_q("") == True
+
+
+def test_shell_menu():
+    shell = s.PizzaShell()
+    assert shell.do_menu("") == None
+
+
+def test_shell_cart():
+    shell = s.PizzaShell()
+    assert shell.do_cart("1") == None
+
+
+def test_shell_new():
+    shell = s.PizzaShell()
+    assert shell.do_new("") == None
+
+
+def test_shell_add():
+    shell = s.PizzaShell()
+    assert shell.do_add("1 drink coke") == None
+
+
+def test_shell_remove():
+    shell = s.PizzaShell()
+    assert shell.do_remove("1 drink coke") == None
+
+
+def test_shell_checkout():
+    shell = s.PizzaShell()
+    assert shell.do_checkout("1 pickup") == None
+
+
+def test_shell_cancel():
+    shell = s.PizzaShell()
+    assert shell.do_cancel("1") == None
+
+
+def test_shell_emptyline():
+    shell = s.PizzaShell()
+    assert shell.emptyline() == None
+
 # Tests for server
 
 
@@ -389,7 +388,7 @@ def test_get_order():
     response = app.test_client().get('/order/1')
 
     assert response.status_code == 200
-    assert response.data == b'{"coke":{"price":1.88,"quantity":1},"custom-pizza-1":{"price":8.75,"quantity":1,"size":{"name":"small","price":6.25},"toppings":{"beef":2.5}},"small-neapolitan":{"price":11.98,"quantity":1},"subtotal":22.61,"total":25.55}\n'
+    assert response.data == b"[{'name': 'coke', 'price': 1.88}, {'name': 'small-neapolitan', 'size': {'name': 'small', 'price': 3.99}, 'price': 11.98}, {'name': 'custom-pizza-1', 'size': {'name': 'small', 'price': 6.25}, 'price': 8.75, 'toppings': [{'name': 'beef', 'price': 2.5}]}, {'subtotal': 22.61}, {'total': 25.55}]"
 
 
 def test_remove_pizza():
