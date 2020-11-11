@@ -123,8 +123,11 @@ def add_or_remove_drink(order_number):
         return str(drink_name) + " item added!"
     # Or Remove drink if DELETE
     elif request.method == 'DELETE':
-        order.remove_item(drink_name)
-        return str(drink_name) + " item removed!"
+        removeResult = order.remove_item(drink_name)
+        if removeResult:
+            return removeResult
+        else:
+            return str(drink_name) + " item removed!"
 
 
 @app.route('/order/<order_number>/pizza', methods=['POST', 'DELETE'])
@@ -150,8 +153,13 @@ def add_or_remove_pizza(order_number):
         return str(pizza_size.name + "-" + pizza_name) + " item added!"
     # Or Remove pizza if DELETE
     elif request.method == 'DELETE':
-        order.remove_item(pizza_name)
-        return str(pizza_name) + " item removed!"
+        # order.remove_item(pizza_name)
+        # return str(pizza_name) + " item removed!"
+        removeResult = order.remove_item(pizza_name)
+        if removeResult:
+            return removeResult
+        else:
+            return str(pizza_name) + " item removed!"
 
 
 @app.route('/order/<order_number>/custompizza', methods=['POST', 'DELETE'])
@@ -177,8 +185,13 @@ def add_or_remove_custom_pizza(order_number):
     # Or Remove custom pizza if DELETE
     elif request.method == 'DELETE':
         pizza_name = req_data['name']
-        order.remove_item(pizza_name)
-        return str(pizza_name) + " item removed!"
+        # order.remove_item(pizza_name)
+        # return str(pizza_name) + " item removed!"
+        removeResult = order.remove_item(pizza_name)
+        if removeResult:
+            return removeResult
+        else:
+            return str(pizza_name) + " item removed!"
 
 
 # ---------- checkout routes ----------
