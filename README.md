@@ -125,7 +125,9 @@ Some negatives would be if the driver is perfectly capable of programming a feat
 
 ## Ya-Tzu's Reflection
 
-I have gained a greater understanding for how different modules work together.
+Pair programming allows me to gain a greater understanding of how different modules work together. Had we not used pair programming, I would not have known so much about how my partner's feature is implemented. Knowing about the implementation of the features that are not mine makes me create better modules that work well with others. I have also found that debugging becomes a breeze and less time-consuming with the navigator present since the driver, being the one writing the code, usually has some blind spots that are easy for others to find but difficult to find yourself. Another benefit of pair programming is that it is good for team-building since we need to communicate a lot during the session.
+
+A setback for pair programming is that it is not easy for the driver to focus on coding the feature since many discussions happen during coding. If the feature for pair programming is not too complex, the time spent on the feature may not be worth it. 
 
 # Program design
 
