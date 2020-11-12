@@ -388,7 +388,10 @@ def test_get_order():
     response = app.test_client().get('/order/1')
 
     assert response.status_code == 200
-    assert response.data == b"[{'name': 'coke', 'price': 1.88}, {'name': 'small-neapolitan', 'size': {'name': 'small', 'price': 3.99}, 'price': 11.98}, {'name': 'custom-pizza-1', 'size': {'name': 'small', 'price': 6.25}, 'price': 8.75, 'toppings': [{'name': 'beef', 'price': 2.5}]}, {'subtotal': 22.61}, {'total': 25.55}]"
+    assert response.data == b'Order 1\n1. Drink(name=coke, price=1.88)\n2. Pizza(name=small-neapolitan, ' + b'price=11.98, type=PredefinedPizza(name=neapolitan, price=7.99), size=Size(na' + \
+        b'me=small, price=3.99))\n3. CustomPizza(name=custom-pizza-1, price=8.75, s' + \
+        b"ize=Size(name=small, price=6.25), toppings=['Topping(name=beef, price=2.5)']" + \
+        b')\nSubtotal: $22.61\nTotal: $25.55\n'
 
 
 def test_remove_pizza():
