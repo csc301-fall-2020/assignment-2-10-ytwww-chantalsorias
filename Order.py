@@ -38,7 +38,8 @@ class Order:
         for item in self.items:
             if item.name == item_name:
                 self.items.remove(item)
-                break
+                return
+        return "The order does not contain " + item_name + "."
 
     def get_items(self):
         items_in_order = "Order " + str(self.order_number) + "\n"

@@ -118,7 +118,7 @@ class CustomPizza(MenuItem):
         self.size = size
         self.toppings = toppings
         self.price = self.calculate_price()
-        MenuItem.__init__(self, "custom_pizza " + str(self.id), self.price)
+        MenuItem.__init__(self, "custom-pizza-" + str(self.id), self.price)
 
     def calculate_price(self):
         price = self.size.price
