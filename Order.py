@@ -41,16 +41,18 @@ class Order:
                 break
 
     def get_items(self):
-        items_in_order = []
+        items_in_order = "Order " + str(self.order_number) + "\n"
+        item_number = 1
         for item in self.items:
-            items_in_order.append(item.serialize())
+            items_in_order += str(item_number) + ". " + str(item) + "\n"
+            item_number += 1
 
         subtotal = self.calculate_price()
         total = round(subtotal * 1.13, 2)
-        items_in_order.append({"subtotal": subtotal})
-        items_in_order.append({"total": total})
+        items_in_order += "Subtotal: $" + str(subtotal) + "\n"
+        items_in_order += "Total: $" + str(total) + "\n"
 
-        return str(items_in_order)
+        return items_in_order
 
     def checkout(self):
         self.order_complete = True

@@ -141,12 +141,13 @@ def add_or_remove_pizza(order_number):
         pizza_size = menu.get_pizza(req_data['size'])
         if (not pizza_size):
             return "Size does not exist", 400
+        size = Size(pizza_size.name, pizza_size.price)
         predefined_pizza = menu.get_pizza(pizza_name)
         if (not predefined_pizza):
             return "Pizza does not exist", 400
 
         # pizza_price = req_data['price']
-        order.add_item(Pizza(predefined_pizza, pizza_size))
+        order.add_item(Pizza(predefined_pizza, size))
         return str(pizza_size.name + "-" + pizza_name) + " item added!"
     # Or Remove pizza if DELETE
     elif request.method == 'DELETE':
