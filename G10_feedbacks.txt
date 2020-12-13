@@ -1,0 +1,26 @@
+Pair Programming (14/15):
+The report contained some good reflections on what went well and not well in the process.
+It would be also nice to also talk about what can be done better next time in terms of pair programming.
+
+Program design (17/20):
+The report briefly talked about the design patterns used in the program (Factory Method, Singleton, etc).
+The program design is good in general.
+
+Functionality (23/25):
+Have simple input error checking against wrong inputs.
+CLI needs some time to get used to, but all the functionality that were tested worked. It would be better if user doesn't have to type all the selections (e.g. use a numbering system) or they can pick using up/down arrows.
+
+Tests (20/20):
+The project achieved above 90% coverage (94%).
+
+Code Craftsmanship (7/10):
+There are some comments included at various places of the project. Would be nicer to include some comments at the beginning of a function that briefly describes its usage.
+The coding style looks clean and consistent.
+The report briefly mentioned the tools being used for development.
+
+md explanation and organization (9/10):
+The readme file included good set of instructions on how to run and test the program.
+The readme file also includes very detailed breakdown of the functionality of the program.
+
+total: 90
+
